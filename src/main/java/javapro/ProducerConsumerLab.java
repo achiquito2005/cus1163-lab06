@@ -54,16 +54,25 @@ public class ProducerConsumerLab {
     static class Producer implements Runnable {
         // TODO 1: Implement Producer class here
         // Step 1: Add private SharedBuffer field
-
+        private final SharedBuffer buffer;
         // Step 2: Add constructor
         public Producer(SharedBuffer buffer) {
             // Initialize the buffer field
+            this.buffer = buffer;
         }
 
         // Step 3: Implement run() method
         @Override
         public void run() {
             // Add your implementation here
+            try {
+                for (int i = 0; i < 10; i++) {
+                    buffer.produce(i);               // blocks if buffer is full
+                }
+                System.out.println("[Producer] finished producing 10 items");
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
     }
 
@@ -73,16 +82,26 @@ public class ProducerConsumerLab {
     static class Consumer implements Runnable {
         // TODO 2: Implement Consumer class here
         // Step 1: Add private SharedBuffer field
-
+        private final SharedBuffer buffer;
         // Step 2: Add constructor
         public Consumer(SharedBuffer buffer) {
             // Initialize the buffer field
+            this.buffer = buffer;
         }
 
         // Step 3: Implement run() method
         @Override
         public void run() {
+            try {
+                for (int i = 0; i < 10; i++) {
+                    int value = buffer.consume();    // blocks if buffer is empty
+                // (Optional) you can print value here, but buffer.consume() / SharedBuffer likely prints for you
+                }
+                System.out.println("[Consumer] finished consuming 10 items");
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             // Add your implementation here
+            }
         }
     }
 
